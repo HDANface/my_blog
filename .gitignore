@@ -76,3 +76,7 @@ htmlcov/
 
 # Local development settings
 settings_local.py
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
