@@ -1,7 +1,9 @@
 from django.urls import path
+from users import views
+
 
 urlpatterns = [
-
+    path('rit/',views.UserCreateAPIView.as_view(),name='rit'),
 ]
 
 # 媒体文件配置
