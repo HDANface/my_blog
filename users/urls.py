@@ -3,7 +3,9 @@ from users import views
 
 
 urlpatterns = [
-    path('rit/',views.UserCreateAPIView.as_view(),name='rit'),
+    path('register/',views.UserCreateAPIView.as_view(),name='user_register'),
+    path('login/',views.UserLoginAPIView.as_view(),name='user_login'),
+
 ]
 
 # 媒体文件配置

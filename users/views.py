@@ -17,7 +17,18 @@ class UserSerializer(serializers.ModelSerializer):
         # 接受字段
         fields = ['username', 'email', 'password']
         # 自定义password字段,允许接受但是不返回,且为必须填写值
-        extra_kwargs = {'password': {'write_only': True,'required': True}}
+        extra_kwargs = {'username':
+                            {'min_length': 3,
+                             'error_messages': {
+                                 'min_length': '用户名至少3位',
+                             }},
+                        'password':
+                            {'write_only': True,
+                             'required': True,
+                             'min_length': 6,
+                             'error_messages': {
+                                 'min_length': '密码至少需要6位',
+                             }}}
 
     # 验证邮箱重复性
     def validate_email(self, email):
@@ -53,10 +64,13 @@ class UserCreateAPIView(CreateModelMixin, GenericAPIView):
 
 """====================================================================================================================="""
 
+# 登录的序列化器
 class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password']
+        extra_kwargs = {'password': {'write_only': True,'required': True}}
+
 
 # 登录API:
 class UserLoginAPIView(CreateModelMixin, GenericAPIView):

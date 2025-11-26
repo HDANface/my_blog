@@ -149,5 +149,14 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication', #JWT引用
     ]
+}
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  #访问令牌有效期
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7), #令牌有效期
+    'ROTATE_REFRESH_TOKENS': False,     #刷新令牌
+    'BLACKLIST_AFTER_ROTATION': True,
 }
