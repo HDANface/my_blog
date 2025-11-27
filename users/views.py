@@ -1,7 +1,7 @@
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import CreateModelMixin
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model, login, logout
 from rest_framework import serializers, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -171,3 +171,14 @@ class UserLoginAPIView(APIView):
                 'msg': '请提供邮箱和密码',
                 'data': None
             }, status=status.HTTP_400_BAD_REQUEST)
+
+    # 注销
+    def delete(self, request):
+        logout(request)
+        return Response({
+            'code': 200,
+            'msg': '成功注销',
+            'data': None
+        })
+
+"""====================================================================================================================="""
