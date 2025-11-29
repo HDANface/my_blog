@@ -12,10 +12,10 @@ class Article(models.Model):
 
     # 基础模型
     title = models.CharField(null=False,max_length=100,verbose_name='文章名称')
-    content = models.TextField(max_length=3000,verbose_name='文章内容')
+    content = models.TextField(blank=True,max_length=3000,verbose_name='文章内容')
     create_author = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name='创作者')
     Cover = models.ImageField(null=True,blank=True,verbose_name='封面')
-    status = models.CharField(choices=choice_status,default='draft',verbose_name='文章状态')
+    status = models.CharField(choices=choice_status,max_length=10,default='draft',verbose_name='文章状态')
 
     # 时间相关
     created_date = models.DateTimeField(auto_now_add=True,verbose_name='创建时间')
@@ -40,6 +40,7 @@ class Category(models.Model):
 
     class Meta:
         db_table = 'blog_category'
+
 
     def __str__(self):
         return self.name
