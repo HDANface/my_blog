@@ -26,6 +26,9 @@ class Article(models.Model):
     comments = models.IntegerField(default=0,verbose_name='评论数')
     views = models.IntegerField(default=0,verbose_name='观看数')
 
+    # 关联性
+    category = models.ForeignKey('Category',null=True,on_delete=models.CASCADE,verbose_name='关联分类')
+    tag = models.ForeignKey('Tag',null=True,on_delete=models.CASCADE,verbose_name='关联标签')
     class Meta:
         db_table = 'blog'
 
