@@ -141,7 +141,7 @@ AUTH_USER_MODEL = 'users.User'
 
 # 媒体文件配置
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = '/media/images/'
 
 
 # REST默认配置

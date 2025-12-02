@@ -6,3 +6,4 @@ urlpatterns = [
     path('articles/<int:pk>',views.ArticleView.as_view(), name='blog_pk'),
 
 ]
+

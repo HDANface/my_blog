@@ -14,7 +14,7 @@ class Article(models.Model):
     title = models.CharField(null=False,max_length=100,verbose_name='文章名称')
     content = models.TextField(blank=True,max_length=3000,verbose_name='文章内容')
     create_author = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name='创作者')
-    Cover = models.ImageField(null=True,blank=True,verbose_name='封面')
+    Cover = models.ImageField(null=True,blank=True,default='',verbose_name='封面')
     status = models.CharField(choices=choice_status,max_length=10,default='draft',verbose_name='文章状态')
 
     # 时间相关
