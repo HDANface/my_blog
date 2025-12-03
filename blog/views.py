@@ -12,12 +12,37 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from blog.models import *
 
+# 标签的序列化器
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = "__all__"
+
+# 分类的序列化器
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"
 
 # 文章的序列化器
 class ArticleSerializer(serializers.ModelSerializer):
+    tag_name = serializers.ListSerializer(
+        child=serializers.CharField(max_length=100),
+        write_only=True,
+        required=False,
+    )
+
+
+    tags = TagSerializer(many=True, read_only=True)
+
     class Meta:
         model = Article
-        fields = "__all__"
+        fields = [
+            'id', 'title', 'content', 'create_author', 'Cover', 'status',
+            'created_date', 'updated_date', 'likes', 'comments', 'views',
+            'category', 'tags', 'tag_name'
+        ]
+
         read_only_fields = ("views", "likes", "comments")
         extra_kwargs = {
             "title": {
@@ -31,6 +56,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         def create(self):
             pass
 
+"========================================================"
 
 # 创建文章
 class ArticleViewSet(GenericAPIView, CreateModelMixin, ListModelMixin):
@@ -86,13 +112,7 @@ class ArticleView(
 
 """==================================================="""
 
-# 分类的序列化器
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = "__all__"
-
-
+# 分类的创建和查看
 class CategoryView(GenericAPIView, CreateModelMixin, ListModelMixin):
 
     def get(self, request,*args,**kwargs):
@@ -105,7 +125,10 @@ class CategoryView(GenericAPIView, CreateModelMixin, ListModelMixin):
 
 
 # 标签的序列化器
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = "__all__"
+class TagView(GenericAPIView, CreateModelMixin, ListModelMixin):
+
+    def get(self, request,*args,**kwargs):
+        return self.list(request,*args,**kwargs)
+
+    def post(self, request,*args,**kwargs):
+        return self.create(request,*args,**kwargs)
