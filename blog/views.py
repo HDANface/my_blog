@@ -6,17 +6,12 @@ from rest_framework.mixins import (
     ListModelMixin,
     RetrieveModelMixin,
     UpdateModelMixin,
+
 )
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from blog.models import *
-
-# 标签的序列化器
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = "__all__"
 
 # 分类的序列化器
 class CategorySerializer(serializers.ModelSerializer):
@@ -24,9 +19,15 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = "__all__"
 
+# 标签的序列化器
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = "__all__"
+
 # 文章的序列化器
 class ArticleSerializer(serializers.ModelSerializer):
-    tag_name = serializers.ListSerializer(
+    tag_name = serializers.ListField(
         child=serializers.CharField(max_length=100),
         write_only=True,
         required=False,
@@ -53,8 +54,35 @@ class ArticleSerializer(serializers.ModelSerializer):
             }
         }
 
-        def create(self):
-            pass
+        # 重写create方法
+        def create(self, validated_data):
+
+            tag_name = validated_data.pop['tag_name',[]]
+
+            article = Article.objects.create(**validated_data)
+
+            for name in tag_name:
+                tag,_ = Tag.objects.get_or_create(name=name.strip())
+                article.tags.add(tag)
+
+            return article
+
+        # 重写update方法
+        def update(self, instance, validated_data):
+            # 提取标签名称
+            tag_names = validated_data.pop('tag_name', None)
+
+            # 更新其他字段
+            super().update(instance, validated_data)
+
+            # 更新标签
+            if tag_names is not None:
+                instance.tags.clear()
+                for name in tag_names:
+                    tag, _ = Tag.objects.get_or_create(name=name.strip())
+                    instance.tags.add(tag)
+
+            return instance
 
 "========================================================"
 
@@ -113,22 +141,55 @@ class ArticleView(
 """==================================================="""
 
 # 分类的创建和查看
-class CategoryView(GenericAPIView, CreateModelMixin, ListModelMixin):
+class CategoryView(GenericAPIView, ListModelMixin,CreateModelMixin, UpdateModelMixin,DestroyModelMixin):
 
-    def get(self, request,*args,**kwargs):
-        return self.lsit(request,*args,**kwargs)
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
 
-    def post(self, request,*args,**kwargs):
-        return self.create(request,*args,**kwargs)
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        else:
+            return [IsAuthenticated()]
 
-"""==================================================="""
 
-
-# 标签的序列化器
-class TagView(GenericAPIView, CreateModelMixin, ListModelMixin):
 
     def get(self, request,*args,**kwargs):
         return self.list(request,*args,**kwargs)
 
     def post(self, request,*args,**kwargs):
         return self.create(request,*args,**kwargs)
+
+    def put(self, request,*args,**kwargs):
+        return self.update(request,*args,**kwargs)
+
+    def delete(self,request,*args,**kwargs):
+        return self.destroy(request,*args,**kwargs)
+
+"""==================================================="""
+
+
+# 标签的序列化器
+class TagView(GenericAPIView, ListModelMixin,CreateModelMixin, UpdateModelMixin,DestroyModelMixin):
+
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
+    permission_classes = []
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        else:
+            return [IsAuthenticated()]
+
+    def get(self, request,*args,**kwargs):
+        return self.list(request,*args,**kwargs)
+
+    def post(self, request,*args,**kwargs):
+        return self.create(request,*args,**kwargs)
+
+    def put(self, request,*args,**kwargs):
+        return self.update(request,*args,**kwargs)
+
+    def delete(self,request,*args,**kwargs):
+        return self.destroy(request,*args,**kwargs)
