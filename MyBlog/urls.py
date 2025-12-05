@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.url')),
     path('user/',include('users.urls')),
+    path('medias/',include('medias.urls')),
 ]
 
 # 媒体文件配置
