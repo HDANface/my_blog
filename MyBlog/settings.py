@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
     'medias.apps.MediasConfig',
+    'comments.apps.CommentsConfig',
 
     #三方应用
     'rest_framework',

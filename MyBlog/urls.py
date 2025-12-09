@@ -24,6 +24,7 @@ urlpatterns = [
     path('blog/', include('blog.url')),
     path('user/',include('users.urls')),
     path('medias/',include('medias.urls')),
+    path('comments/',include('comments.urls')),
 ]
 
 # 媒体文件配置
