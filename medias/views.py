@@ -1,3 +1,5 @@
+from rest_framework.permissions import IsAuthenticated
+
 from medias.models import Media
 from rest_framework.generics import GenericAPIView,RetrieveUpdateDestroyAPIView
 from rest_framework.mixins import  CreateModelMixin
@@ -13,6 +15,7 @@ class MediaSerializer(serializers.ModelSerializer):
 class CreateMediaAPIView(GenericAPIView,CreateModelMixin):
     serializer_class = MediaSerializer
     queryset = Media
+    permission_classes = [IsAuthenticated]
 
     # 添加图片
     def post(self,request,*args,**kwargs):
@@ -22,5 +25,5 @@ class CreateMediaAPIView(GenericAPIView,CreateModelMixin):
 class RUDAPI(RetrieveUpdateDestroyAPIView):
     serializer_class = MediaSerializer
     queryset = Media
-
+    permission_classes = [IsAuthenticated]
 

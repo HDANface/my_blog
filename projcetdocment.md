@@ -103,7 +103,7 @@ python
 ```
 GET    /api/comments/?article={id}  # 文章评论列表
 POST   /api/comments/               # 发表评论
-POST   /api/comments/{id}/reply/    # 回复评论
+            !!!POST   /api/comments/{id}/reply/    # 回复评论
 DELETE /api/comments/{id}/          # 删除评论
 ```
 

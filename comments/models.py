@@ -4,7 +4,7 @@ from django.conf import settings
 
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='user_comments',verbose_name='评论用户')
-    comment = models.TextField(null=False,blank=True,help_text='请输入你的评论',verbose_name='评论内容')
+    comment = models.TextField(null=False,blank=False,help_text='请输入你的评论',verbose_name='评论内容')
 
     # 这里让blog里面的文章和评论进行关联
     article = models.ForeignKey('blog.Article',on_delete=models.CASCADE,related_name='article_comments',verbose_name='关联文章')
@@ -30,4 +30,5 @@ class Comment(models.Model):
             'username':self.user.username,
             'avtar':self.user.avtar.url
         }
+
 

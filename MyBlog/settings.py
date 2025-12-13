@@ -37,13 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles'
 
     # app应用
     'blog.apps.BlogConfig',
+    'tools.apps.ToolsConfig',
     'users.apps.UsersConfig',
     'medias.apps.MediasConfig',
     'comments.apps.CommentsConfig',
+
 
     #三方应用
     'rest_framework',
