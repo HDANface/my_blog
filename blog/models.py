@@ -31,6 +31,8 @@ class Article(models.Model):
     tag = models.ForeignKey('Tag',null=True,on_delete=models.CASCADE,verbose_name='关联标签')
     class Meta:
         db_table = 'blog'
+        verbose_name = '文章'
+        verbose_name_plural = verbose_name
 
     def __str__(self):
         return self.title
@@ -43,7 +45,7 @@ class Category(models.Model):
 
     class Meta:
         db_table = 'blog_category'
-
+        verbose_name = '分类'
 
     def __str__(self):
         return self.name
