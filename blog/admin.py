@@ -15,11 +15,6 @@ class ArticleAdmin(admin.ModelAdmin):
     # 按选择字段降序
     ordering = ('-created_date',)
 
-
-
-
-
-
 # Register your models here.
 admin.site.register(Article,ArticleAdmin)
 admin.site.register(Tag)
